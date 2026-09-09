@@ -89,6 +89,7 @@ a:hover{color:#7d3a1d}
 <div style="border-left:clamp(0px,calc((100vw - 620px) * 999),1px) solid #cdc5b4;padding-left:clamp(0px,calc((100vw - 620px) * 999),36px);">
 <div style="font-size:clamp(22px,4.5vw,28px);font-weight:500;line-height:1.15;white-space:nowrap;">R350 <span style="font-size:16px;font-weight:300;">per person</span></div>
 <div style="font-size:clamp(22px,4.5vw,28px);font-weight:500;line-height:1.15;white-space:nowrap;">R600 <span style="font-size:16px;font-weight:300;">per couple</span></div>
+<div style="font-size:clamp(17px,3.4vw,20px);font-weight:500;line-height:1.2;white-space:nowrap;color:#9c4a26;padding-top:3px;">R250 <span style="font-weight:300;">per pensioner</span></div>
 </div>
 </div>
 
@@ -160,6 +161,10 @@ a:hover{color:#7d3a1d}
 </select>
 </label>
 </div>
+<label style="display:flex;align-items:flex-start;gap:11px;cursor:pointer;font-size:15px;font-weight:300;line-height:1.5;color:#1c1a15;">
+<input type="checkbox" checked="{{ pensioner }}" onChange="{{ setPensioner }}" style="width:17px;height:17px;margin-top:3px;accent-color:#9c4a26;flex:none;">
+<span>Pensioner rate, R250 a seat.<span style="color:#6d665c;"> Tick this if everyone in the booking is a pensioner. We check it at the door, not online.</span></span>
+</label>
 </div>
 </div>
 
@@ -193,7 +198,7 @@ a:hover{color:#7d3a1d}
 <div>
 <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#a49a8c;margin-bottom:4px;">Amount due</div>
 <div style="font-family:'Instrument Serif',Georgia,serif;font-size:clamp(23px,4.8vw,30px);line-height:1.1;">{{ amountDue }}</div>
-<div style="font-size:14px;font-weight:300;color:#c8bfb0;padding-top:4px;">R350 per person, R600 per couple</div>
+<div style="font-size:14px;font-weight:300;color:#c8bfb0;padding-top:4px;">R350 per person, R600 per couple, R250 per pensioner</div>
 </div>
 </div>
 </div>
@@ -406,6 +411,7 @@ a:hover{color:#7d3a1d}
 <div style="border-left:clamp(0px,calc((100vw - 620px) * 999),1px) solid #cdc5b4;padding-left:clamp(0px,calc((100vw - 620px) * 999),36px);">
 <div style="font-size:clamp(22px,4.5vw,28px);font-weight:500;line-height:1.15;white-space:nowrap;">R350 <span style="font-size:16px;font-weight:300;">per persoon</span></div>
 <div style="font-size:clamp(22px,4.5vw,28px);font-weight:500;line-height:1.15;white-space:nowrap;">R600 <span style="font-size:16px;font-weight:300;">per paar</span></div>
+<div style="font-size:clamp(17px,3.4vw,20px);font-weight:500;line-height:1.2;white-space:nowrap;color:#9c4a26;padding-top:3px;">R250 <span style="font-weight:300;">per pensioenaris</span></div>
 </div>
 </div>
 
@@ -477,6 +483,10 @@ a:hover{color:#7d3a1d}
 </select>
 </label>
 </div>
+<label style="display:flex;align-items:flex-start;gap:11px;cursor:pointer;font-size:15px;font-weight:300;line-height:1.5;color:#1c1a15;">
+<input type="checkbox" checked="{{ pensioner }}" onChange="{{ setPensioner }}" style="width:17px;height:17px;margin-top:3px;accent-color:#9c4a26;flex:none;">
+<span>Pensioenaristarief, R250 per plek.<span style="color:#6d665c;"> Merk dit as almal in die bespreking pensioenarisse is. Ons kyk daarna by die deur, nie aanlyn nie.</span></span>
+</label>
 </div>
 </div>
 
@@ -510,7 +520,7 @@ a:hover{color:#7d3a1d}
 <div>
 <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#a49a8c;margin-bottom:4px;">Bedrag verskuldig</div>
 <div style="font-family:'Instrument Serif',Georgia,serif;font-size:clamp(23px,4.8vw,30px);line-height:1.1;">{{ amountDue }}</div>
-<div style="font-size:14px;font-weight:300;color:#c8bfb0;padding-top:4px;">R350 per persoon, R600 per paar</div>
+<div style="font-size:14px;font-weight:300;color:#c8bfb0;padding-top:4px;">R350 per persoon, R600 per paar, R250 per pensioenaris</div>
 </div>
 </div>
 </div>
@@ -676,7 +686,7 @@ a:hover{color:#7d3a1d}
 class Component extends DCLogic {
   state = {
     lang: 'en', view: 'home', status: 'idle',
-    first: '', last: '', email: '', wa: '', dial: '+27', seats: '2'
+    first: '', last: '', email: '', wa: '', dial: '+27', seats: '2', pensioner: false
   };
 
   toggle(key) {
@@ -747,15 +757,16 @@ class Component extends DCLogic {
     const site = this.siteUrl();
     const en = 'Song for a Century - a centenary organ concert at Stellenbosch United Church. '
       + 'Winand Grundling at the organ, with Annatjie Joubert, soprano. '
-      + 'Friday 30 October 2026, 18:00 for 18:30. Cheese and wine to follow. R350 per person, R600 per couple.';
+      + 'Friday 30 October 2026, 18:00 for 18:30. Cheese and wine to follow. R350 per person, R600 per couple, R250 per pensioner.';
     const afr = 'Song for a Century - eeufeeskonsert by Stellenbosch United Church. '
       + 'Winand Grundling by die orrel, met Annatjie Joubert, sopraan. '
-      + 'Vrydag 30 Oktober 2026, 18:00 vir 18:30. Kaas en wyn na afloop. R350 per persoon, R600 per paar.';
+      + 'Vrydag 30 Oktober 2026, 18:00 vir 18:30. Kaas en wyn na afloop. R350 per persoon, R600 per paar, R250 per pensioenaris.';
     return (af ? afr : en) + (site ? '\n' + site : '');
   }
 
   amount() {
     const n = Math.max(1, parseInt(this.state.seats, 10) || 1);
+    if (this.state.pensioner) return n * 250;
     return Math.floor(n / 2) * 600 + (n % 2) * 350;
   }
 
@@ -771,7 +782,8 @@ class Component extends DCLogic {
     const body = new URLSearchParams({
       first: s.first.trim(), last: s.last.trim(), email: s.email.trim(),
       wa: (s.dial + ' ' + s.wa).trim(), seats: String(Math.max(1, parseInt(s.seats, 10) || 1)),
-      reference: this.reference(), amount: String(this.amount())
+      reference: this.reference(), amount: String(this.amount()),
+      pensioner: s.pensioner ? 'yes' : ''
     });
     fetch(url, { method: 'POST', mode: 'no-cors', body })
       .then(() => { this.setState({ status: 'sent' }); this.holdThenClear(); })
@@ -780,7 +792,7 @@ class Component extends DCLogic {
 
   resetForm() {
     clearTimeout(this._clearT);
-    this.setState({ status: 'idle', first: '', last: '', email: '', wa: '', dial: '+27', seats: '2' });
+    this.setState({ status: 'idle', first: '', last: '', email: '', wa: '', dial: '+27', seats: '2', pensioner: false });
   }
 
   /** A sent booking clears itself after an hour so the next visitor starts fresh. */
@@ -826,9 +838,10 @@ class Component extends DCLogic {
       noForm: !form,
       progOpen: open, progLocked: !open,
       first: this.state.first, last: this.state.last, email: this.state.email,
-      wa: this.state.wa, seats: this.state.seats,
+      wa: this.state.wa, seats: this.state.seats, pensioner: this.state.pensioner,
       setFirst: this.set('first'), setLast: this.set('last'),
       setEmail: this.set('email'), setWa: this.set('wa'), setSeats: this.set('seats'),
+      setPensioner: (e) => this.setState({ pensioner: !!(e && e.target ? e.target.checked : !this.state.pensioner) }),
       refPreview: this.reference(), amountDue: 'R' + this.amount(),
       doSubmit: () => this.submit(),
       doReset: () => this.resetForm(),
